@@ -1,11 +1,5 @@
+import { GestionPersonasService } from './../../servicios/gestion-personas.service';
 import { Component } from '@angular/core';
-
-export interface IPersona {
-  id: string;
-  nombre: string;
-  apellido: string;
-}
-
 
 @Component({
   selector: 'app-home',
@@ -13,24 +7,7 @@ export interface IPersona {
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-  personas: IPersona[] = [
-    {
-      id: "aa",
-      nombre: "Aitor",
-      apellido: "Arana"
-    },
-    {
-      id: "sr",
-      nombre: "Sara",
-      apellido: "Ruiz"
-    },
-    {
-      id: "mo",
-      nombre: "Miren",
-      apellido: "Ojer"
-    }
-  ]
 
-  constructor() {}
+  constructor(public gestionPersonas: GestionPersonasService) {}
 
 }

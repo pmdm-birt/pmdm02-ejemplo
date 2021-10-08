@@ -80,6 +80,14 @@ export class GestionPersonasService {
         console.log(this.personas);
       }
     }
+  }
+  
+  modificarPersona(id: string, nombre: string, apellido: string) {
+    // Busca la persona con el id dado. Utiliza una función anónima como parámetro
+    let personaEncontrada: IPersona = this.personas.find(function(cadaPersona) { return cadaPersona.id == id });
+    let indice: number = this.personas.indexOf(personaEncontrada);
+    this.personas[indice].nombre = nombre;
+    this.personas[indice].apellido = apellido;
 
   }
 }

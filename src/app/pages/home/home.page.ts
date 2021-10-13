@@ -1,4 +1,5 @@
-import { AlertController } from '@ionic/angular';
+import { InsertarPage } from './../insertar/insertar.page';
+import { AlertController, ModalController } from '@ionic/angular';
 import { GestionPersonasService, IPersona } from './../../servicios/gestion-personas.service';
 import { Component } from '@angular/core';
 
@@ -10,7 +11,7 @@ import { Component } from '@angular/core';
 export class HomePage {
 
   // Inyectamos el servicio para gestionar personas y el controlador de alertas
-  constructor(public gestionPersonas: GestionPersonasService, private alerta: AlertController) {}
+  constructor(public gestionPersonas: GestionPersonasService, private alerta: AlertController, private modal: ModalController) {}
 
   borrar(id: string) {
     this.gestionPersonas.borrarPersona(id);
@@ -72,6 +73,14 @@ export class HomePage {
     });
 
     await alert.present();
+  }
+
+  async presentarModal() {
+    const modal = await this.modal.create({
+      backdropDismiss: false,
+      component: InsertarPage,
+    });
+    return await modal.present();
   }
   
 }

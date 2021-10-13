@@ -1,3 +1,4 @@
+import { ModalController } from '@ionic/angular';
 import { GestionPersonasService } from './../../servicios/gestion-personas.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -11,7 +12,7 @@ export class InsertarPage implements OnInit {
   nombre: string;
   apellido: string;
   
-  constructor(private gestionPersonas: GestionPersonasService) { }
+  constructor(private gestionPersonas: GestionPersonasService, public modal: ModalController) { }
 
   ngOnInit() {
   }
@@ -20,6 +21,9 @@ export class InsertarPage implements OnInit {
 
     // Insertar
     this.gestionPersonas.insertarPersona(this.id, this.nombre, this.apellido);
+
+    //dismiss
+    this.modal.dismiss();
   }
 
 }

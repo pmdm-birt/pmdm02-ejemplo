@@ -1,34 +1,29 @@
+import { IPersona } from './../interfaces/mis-interfaces';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
-export interface IPersona {
-  id: string;
-  nombre: string;
-  apellido: string;
-}
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GestionPersonasService {
-  private personas: IPersona[] = [
-    {
-      id: "aa",
-      nombre: "Aitor",
-      apellido: "Arana"
-    },
-    {
-      id: "sr",
-      nombre: "Sara",
-      apellido: "Ruiz"
-    },
-    {
-      id: "mo",
-      nombre: "Miren",
-      apellido: "Ojer"
-    }
-  ]
+  private personas: IPersona[] = [];
 
-  constructor() { }
+  constructor(private leerFichero: HttpClient) {
+    this.getPersonasFichero();
+  }
+
+  getPersonasFichero() {
+    let datosFichero: Observable<IPersona[]>;
+
+    datosFichero = this.leerFichero.get<IPersona[]>("/assets/datos/personas.json");
+
+    datosFichero.subscribe(datos => {
+      console.log(datos);
+      this.personas.push(...datos);
+    });
+
+  }
 
   getPersonas() {
     return this.personas;

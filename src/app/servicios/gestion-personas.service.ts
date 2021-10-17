@@ -2,6 +2,7 @@ import { IPersona } from './../interfaces/mis-interfaces';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { GestionStorageService } from './gestion-storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,20 +10,27 @@ import { Observable } from 'rxjs';
 export class GestionPersonasService {
   private personas: IPersona[] = [];
 
-  constructor(private leerFichero: HttpClient) {
+  constructor(private leerFichero: HttpClient, private gestionAlmacen: GestionStorageService) {
     this.getPersonasFichero();
+    let datosPromesa: Promise<IPersona[]> = gestionAlmacen.getObject("personas");
+
+    datosPromesa.then( datos => {
+      console.log(datos);
+      this.personas.push(...datos);
+    });
   }
 
   getPersonasFichero() {
     let datosFichero: Observable<IPersona[]>;
-
+    /*
     datosFichero = this.leerFichero.get<IPersona[]>("/assets/datos/personas.json");
 
     datosFichero.subscribe(datos => {
       console.log(datos);
       this.personas.push(...datos);
+      this.gestionAlmacen.setObject("personas", this.personas);
     });
-
+    */
   }
 
   getPersonas() {
@@ -40,6 +48,7 @@ export class GestionPersonasService {
 
     // La insertamos
     this.personas.push(nuevaPersona);
+    this.gestionAlmacen.setObject("personas", this.personas);
 
     // this.personas = [...this.personas, nuevaPersona];  // Crea una copia del array para que el array sea inmutable
 
@@ -66,6 +75,7 @@ export class GestionPersonasService {
       if (indice != -1) {
         // Borra la persona con el índice obtenido
         this.personas.splice(indice, 1);
+        this.gestionAlmacen.setObject("personas", this.personas);
 
         // Genera un nuevo array sin el elemento a borrar y lo asigna
         // let inicio = this.personas.slice(0, indice);             // Copia primera parte del array
@@ -83,6 +93,6 @@ export class GestionPersonasService {
     let indice: number = this.personas.indexOf(personaEncontrada);
     this.personas[indice].nombre = nombre;
     this.personas[indice].apellido = apellido;
-
+    this.gestionAlmacen.setObject("personas", this.personas);
   }
 }

@@ -11,18 +11,24 @@ export class GestionPersonasService {
   private personas: IPersona[] = [];
 
   constructor(private leerFichero: HttpClient, private gestionAlmacen: GestionStorageService) {
-    this.getPersonasFichero();
+    
     let datosPromesa: Promise<IPersona[]> = gestionAlmacen.getObject("personas");
 
+    // Si hay datos en local se recuperan. Si no se leen del fichero
     datosPromesa.then( datos => {
+      if (datos) {
+        this.personas.push(...datos);
+      } else {
+        this.getPersonasFichero();
+      }
       console.log(datos);
-      this.personas.push(...datos);
+      
     });
   }
 
   getPersonasFichero() {
     let datosFichero: Observable<IPersona[]>;
-    /*
+
     datosFichero = this.leerFichero.get<IPersona[]>("/assets/datos/personas.json");
 
     datosFichero.subscribe(datos => {
@@ -30,7 +36,7 @@ export class GestionPersonasService {
       this.personas.push(...datos);
       this.gestionAlmacen.setObject("personas", this.personas);
     });
-    */
+
   }
 
   getPersonas() {
